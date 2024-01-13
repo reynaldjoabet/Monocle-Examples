@@ -54,7 +54,7 @@ jitwatch.out
 project/**/metals.sbt
 
 .bsp
-/.scala-build§
+.scala-builds/
 
 /monocle-scala2-examples/target/
 
