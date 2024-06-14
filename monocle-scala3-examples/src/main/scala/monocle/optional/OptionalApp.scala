@@ -3,13 +3,15 @@ package optional
 
 import monocle.Optional
 
-object OptionalApp extends App{
+object OptionalApp extends App {
+
   val head = Optional[List[Int], Int] {
-    case Nil => None
+    case Nil     => None
     case x :: xs => Some(x)
-  } { a => {
-    case Nil => Nil
-    case x :: xs => a :: xs
+  } { a =>
+    {
+      case Nil     => Nil
+      case x :: xs => a :: xs
     }
   }
 
@@ -19,7 +21,6 @@ object OptionalApp extends App{
   println(head.nonEmpty(xs))
   println(head.nonEmpty(ys))
 
-  
   head.getOrModify(xs)
   head.getOrModify(ys)
 
@@ -37,4 +38,3 @@ object OptionalApp extends App{
   println(head.modifyOption(_ + 1)(ys))
 
 }
-

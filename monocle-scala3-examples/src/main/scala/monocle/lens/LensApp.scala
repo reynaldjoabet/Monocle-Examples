@@ -1,18 +1,19 @@
 package monocle
 package lens
 
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import cats.syntax.functor._
+
+import monocle.macros.GenLens
 import monocle.overview.Address
 import monocle.Lens
-import monocle.macros.GenLens
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
+object LensApp extends App {
 
-object LensApp extends App{
-
-  val streetNumber = Lens[Address, Int](_.streetNumber)(n => a => a.copy(streetNumber = n))
+  val streetNumber         = Lens[Address, Int](_.streetNumber)(n => a => a.copy(streetNumber = n))
   val streetNumberViaMacro = GenLens[Address](_.streetNumber)
 
   val address = Address(10, "High Street")
@@ -25,8 +26,7 @@ object LensApp extends App{
   println(streetNumber.replace(n + 1)(address))
 
   def neighbors(n: Int): List[Int] =
-    if (n > 0)  List(n - 1, n + 1) else List(n + 1)
-
+    if (n > 0) List(n - 1, n + 1) else List(n + 1)
 
   println(streetNumber.modifyF(neighbors)(address))
 
@@ -36,14 +36,16 @@ object LensApp extends App{
 
   println(Await.result(streetNumber.modifyF(updateNumber)(address), 1.second))
 
-  val john = Person("John", 20, Address(10, "High Street"))
+  val john       = Person("John", 20, Address(10, "High Street"))
   val addressLen = GenLens[Person](_.address)
   println(addressLen.andThen(streetNumber).get(john))
   println(addressLen.andThen(streetNumber).replace(2)(john))
 
   // Other ways of Lens Composition
 
-  println((GenLens[Person](_.name).replace("Mike") compose GenLens[Person](_.age).modify(_ + 1))(john))
+  println(
+    GenLens[Person](_.name).replace("Mike").compose(GenLens[Person](_.age).modify(_ + 1))(john)
+  )
   // macro based syntax:
   import monocle.syntax.all._
   println(john.focus(_.name).replace("Mike").focus(_.age).modify(_ + 1))
@@ -64,6 +66,3 @@ object LensApp extends App{
   // println(PrefixedPoint._x.get(p))
 
 }
-
-
-

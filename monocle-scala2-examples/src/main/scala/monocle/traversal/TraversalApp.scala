@@ -1,14 +1,16 @@
 package monocle
 package traversal
 
-//import alleycats.std.map._
-import cats.Applicative
 import cats.syntax.applicative._
 import cats.syntax.traverse._
+//import alleycats.std.map._
+import cats.Applicative
+
 import monocle.Traversal
 
-object TraversalApp extends App{
-  val xs = List(1, 2, 3, 4, 5)
+object TraversalApp extends App {
+
+  val xs    = List(1, 2, 3, 4, 5)
   val eachL = Traversal.fromTraverse[List, Int]
   println(eachL.replace(0)(xs))
   println(eachL.modify(_ + 1)(xs))
@@ -30,7 +32,7 @@ object TraversalApp extends App{
 
   val m = Map(1 -> "one", 2 -> "two", 3 -> "three", 4 -> "Four")
 
-  //val filterEven = filterKey[Int, String](_ % 2 == 0)
+  // val filterEven = filterKey[Int, String](_ % 2 == 0)
 
-  //println(filterEven.modify(_.toUpperCase)(m))
+  // println(filterEven.modify(_.toUpperCase)(m))
 }

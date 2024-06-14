@@ -3,8 +3,12 @@ package optics
 
 import monocle.Iso
 
-object IsoApp extends App{
-  val personToTuple = Iso[Person, (String, Int)](p => (p.name, p.age)){ case (name, age) => Person(name, age) }
+object IsoApp extends App {
+
+  val personToTuple = Iso[Person, (String, Int)](p => (p.name, p.age)) { case (name, age) =>
+    Person(name, age)
+  }
+
   println(personToTuple.get(Person("Zoe", 25)))
   println(personToTuple.reverseGet(("Zoe", 25)))
   println(personToTuple(("Zoe", 25)))
@@ -20,4 +24,5 @@ object IsoApp extends App{
   val stringToList = Iso[String, List[Char]](_.toList)(_.mkString(""))
 
   println(stringToList.modify(_.tail)("Hello"))
+
 }
