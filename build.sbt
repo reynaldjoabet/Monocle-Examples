@@ -26,3 +26,5 @@ lazy val `monocle-scala3-examples` = (project in file("monocle-scala3-examples")
 //in order to run the program in a different JVM, we add the following
 
 //fork in run := true
+
+ThisBuild/ usePipelining := true
